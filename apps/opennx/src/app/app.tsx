@@ -1,36 +1,55 @@
-import React, { useCallback, useState } from 'react';
-
+import React from 'react';
 import styled from 'styled-components';
-import Downshift from './components/Downshift';
-import TestComponent from './components/Test';
-import TestFuncChild from './components/TestFuncChild';
+import Button from './components/Button';
+import MonthView from './components/MonthView';
+import { MM } from './contants/month';
 
-const AppRoot = styled.div`
-  border: 1px solid black;
-  padding: 2rem;
-  max-width: 20rem;
-  margin: auto;
+const Title = styled.h1`
+  text-align: center;
+`;
+
+const ControllerWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+`;
+
+const ButtonWrapper = styled.div`
+  flex: 1;
 `;
 
 export function App() {
-  const [count1, setCount1] = useState<number>(0);
-  const clickHandler1 = useCallback(() => {
-    setCount1(count1 + 1);
-  }, [count1]);
-
-  const [count2, setCount2] = useState<number>(0);
-  const clickHandler2 = useCallback(() => {
-    setCount2(count2 + 1);
-  }, [count2]);
   return (
-    <AppRoot>
-      <Downshift count={count1} onClick={clickHandler1} />
-      <Downshift count={count2} onClick={clickHandler2} />
-
-      <TestFuncChild>
-        <TestComponent />
-      </TestFuncChild>
-    </AppRoot>
+    <div>
+      <Title>Voyage Calendar</Title>
+      <ControllerWrapper>
+        <ButtonWrapper>
+          <Button title="today" onClick={() => console.log('clicked')}>
+            Today
+          </Button>
+        </ButtonWrapper>
+        <ButtonWrapper style={{ textAlign: 'center' }}>
+          <Button title="today" onClick={() => console.log('clicked')}>
+            {'<'}
+          </Button>
+          <Button title="today" onClick={() => console.log('clicked')}>
+            {'>'}
+          </Button>
+        </ButtonWrapper>
+        <ButtonWrapper style={{ textAlign: 'right' }}>
+          <Button title="day_view_btn" onClick={() => console.log('clicked')}>
+            Day
+          </Button>
+          <Button title="week_view_btn" onClick={() => console.log('clicked')}>
+            Week
+          </Button>
+          <Button title="month_view_btn" onClick={() => console.log('clicked')}>
+            Month
+          </Button>
+        </ButtonWrapper>
+      </ControllerWrapper>
+      <MonthView monthNumber={MM.April} />
+    </div>
   );
 }
 

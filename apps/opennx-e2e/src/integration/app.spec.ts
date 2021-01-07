@@ -1,13 +1,9 @@
-import { getGreeting } from '../support/app.po';
+import { getHeader } from '../support/app.po';
 
-describe('opennx', () => {
+describe('welcome', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword');
-
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('This is first');
+    getHeader().contains('Voyage Calendar');
   });
 });
