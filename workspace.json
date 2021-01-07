@@ -1,0 +1,133 @@
+{
+  "version": 2,
+  "projects": {
+    "opennx": {
+      "root": "apps/opennx",
+      "sourceRoot": "apps/opennx/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/opennx",
+            "index": "apps/opennx/src/index.html",
+            "main": "apps/opennx/src/main.tsx",
+            "polyfills": "apps/opennx/src/polyfills.ts",
+            "tsConfig": "apps/opennx/tsconfig.app.json",
+            "assets": [
+              "apps/opennx/src/favicon.ico",
+              "apps/opennx/src/assets"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/opennx/src/environments/environment.ts",
+                  "with": "apps/opennx/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "opennx:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "opennx:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/opennx/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/opennx"
+          ],
+          "options": {
+            "jestConfig": "apps/opennx/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "opennx-e2e": {
+      "root": "apps/opennx-e2e",
+      "sourceRoot": "apps/opennx-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/opennx-e2e/cypress.json",
+            "tsConfig": "apps/opennx-e2e/tsconfig.e2e.json",
+            "devServerTarget": "opennx:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "opennx:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/opennx-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "styled-components"
+      },
+      "library": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "opennx"
+}
