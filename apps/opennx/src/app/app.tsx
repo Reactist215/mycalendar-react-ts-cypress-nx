@@ -208,28 +208,27 @@ export function App() {
             <WeekView year={year} weeknum={weeknum} />
           </Transition>
         )}
-        {viewMode === ViewModes.DAY && (
-          <Transition
-            timeout={1000}
-            in={viewMode === ViewModes.DAY}
-            mountOnEnter
-            unmountOnExit
-            onExit={() => {
-              TweenMax.to(transiationRef.current, {
-                autoAlpha: 0,
-              });
-            }}
-            ref={transiationRef}
-            addEndListener={(node) => {
-              TweenMax.to(node, 0.5, {
-                autoAlpha: viewMode === ViewModes.DAY ? 1 : 0,
-                x: viewMode === ViewModes.DAY ? 0 : 50,
-              });
-            }}
-          >
-            <DayView date={date} />
-          </Transition>
-        )}
+
+        <Transition
+          timeout={1000}
+          in={viewMode === ViewModes.DAY}
+          mountOnEnter
+          unmountOnExit
+          onExit={() => {
+            TweenMax.to(transiationRef.current, {
+              autoAlpha: 0,
+            });
+          }}
+          ref={transiationRef}
+          addEndListener={(node) => {
+            TweenMax.to(node, 0.5, {
+              autoAlpha: viewMode === ViewModes.DAY ? 1 : 0,
+              x: viewMode === ViewModes.DAY ? 0 : 50,
+            });
+          }}
+        >
+          <DayView date={date} />
+        </Transition>
       </ViewWrapper>
     </div>
   );
