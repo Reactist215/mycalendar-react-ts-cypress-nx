@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { TweenMax } from 'gsap';
+
+import { Transition } from 'react-transition-group';
 import styled from 'styled-components';
 import moment, { Moment } from 'moment';
 import Button from './components/Button';
@@ -6,6 +9,7 @@ import MonthView from './components/MonthView';
 import { ViewModes } from './contants/others';
 import WeekView from './components/WeekView';
 import DayView from './components/DayView';
+import { textIntro } from './animations/textIntro';
 
 const Title = styled.h1`
   text-align: center;
@@ -42,6 +46,13 @@ export function App() {
   const [date, setDate] = useState<Moment>(() => {
     return moment();
   });
+
+  const transiationRef = useRef(null);
+  const intro = useRef(null);
+
+  useEffect(() => {
+    textIntro(intro.current);
+  }, []);
 
   const onClickNextMonth = () => {
     if (viewMode === ViewModes.MONTH) {
@@ -106,7 +117,7 @@ export function App() {
 
   return (
     <div>
-      <Title>Voyage Calendar</Title>
+      <Title ref={intro}>Voyage Calendar</Title>
       {viewMode === ViewModes.MONTH && (
         <Title>{moment([year, month, 1]).format('MM-YYYY')}</Title>
       )}
@@ -160,14 +171,65 @@ export function App() {
 
       <ViewWrapper>
         {viewMode === ViewModes.MONTH && (
-          <MonthView year={year} month={month} />
+          <Transition
+            timeout={1000}
+            in={viewMode === ViewModes.MONTH}
+            mountOnEnter
+            unmountOnExit
+            onExit={() => {
+              TweenMax.to(transiationRef.current, {
+                autoAlpha: 0,
+              });
+            }}
+            ref={transiationRef}
+            addEndListener={(node) => {
+              TweenMax.to(node, 0.5, {
+                autoAlpha: viewMode === ViewModes.MONTH ? 1 : 0,
+                x: viewMode === ViewModes.MONTH ? 0 : 50,
+              });
+            }}
+          >
+            <MonthView year={year} month={month} />
+          </Transition>
         )}
-
         {viewMode === ViewModes.WEEK && (
-          <WeekView year={year} weeknum={weeknum} />
+          <Transition
+            timeout={1000}
+            in={viewMode === ViewModes.WEEK}
+            mountOnEnter
+            unmountOnExit
+            addEndListener={(node) => {
+              TweenMax.to(node, 0.5, {
+                autoAlpha: viewMode === ViewModes.WEEK ? 1 : 0,
+                x: viewMode === ViewModes.WEEK ? 0 : 50,
+              });
+            }}
+          >
+            <WeekView year={year} weeknum={weeknum} />
+          </Transition>
         )}
-
-        {viewMode === ViewModes.DAY && <DayView date={date} />}
+        {viewMode === ViewModes.DAY && (
+          <Transition
+            timeout={1000}
+            in={viewMode === ViewModes.DAY}
+            mountOnEnter
+            unmountOnExit
+            onExit={() => {
+              TweenMax.to(transiationRef.current, {
+                autoAlpha: 0,
+              });
+            }}
+            ref={transiationRef}
+            addEndListener={(node) => {
+              TweenMax.to(node, 0.5, {
+                autoAlpha: viewMode === ViewModes.DAY ? 1 : 0,
+                x: viewMode === ViewModes.DAY ? 0 : 50,
+              });
+            }}
+          >
+            <DayView date={date} />
+          </Transition>
+        )}
       </ViewWrapper>
     </div>
   );
