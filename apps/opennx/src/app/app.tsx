@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { TweenMax } from 'gsap';
-
 import { Transition } from 'react-transition-group';
 import styled from 'styled-components';
 import moment, { Moment } from 'moment';

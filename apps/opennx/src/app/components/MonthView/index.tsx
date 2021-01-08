@@ -9,7 +9,7 @@ import {
 } from '../../util/date';
 import WeekdaysHeader from './components/WeekdaysHeader';
 import WeekdaysRow from './components/WeekdaysRow';
-import { MonthViewWrapper, WeekRowWrapper } from './styled';
+import { EventWrapper, MonthViewWrapper, WeekRowWrapper } from './styled';
 import WeekdaysCell from './components/WeekdaysCell';
 
 type MonthViewProps = {
@@ -32,6 +32,7 @@ const MonthView: FC<MonthViewProps> = ({ year, month }) => {
           ))}
         </WeekRowWrapper>
       ))}
+      <EventWrapper>New Event</EventWrapper>
     </MonthViewWrapper>
   );
 };
