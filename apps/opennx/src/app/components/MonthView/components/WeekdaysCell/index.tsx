@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import moment, { Moment } from 'moment';
 
 type IProps = {
-  day: number;
+  date: Moment;
 };
 
 const WeekdaysCellWrapper = styled.div`
@@ -13,10 +14,10 @@ const WeekdaysCellWrapper = styled.div`
   min-height: 5rem;
 `;
 
-const WeekdaysCell: FC<IProps> = ({ day, children }) => {
+const WeekdaysCell: FC<IProps> = ({ date, children }) => {
   return (
     <WeekdaysCellWrapper>
-      <span>{day}</span>
+      <span>{date.date()}</span>
       {children}
     </WeekdaysCellWrapper>
   );

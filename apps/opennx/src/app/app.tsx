@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import moment from 'moment';
 import Button from './components/Button';
 import MonthView from './components/MonthView';
 import { MM } from './contants/month';
@@ -19,9 +20,36 @@ const ButtonWrapper = styled.div`
 `;
 
 export function App() {
+  const [month, setMonth] = useState(() => {
+    return moment().month();
+  });
+
+  const [year, setYear] = useState(() => {
+    return moment().year();
+  });
+  const onClickNextMonth = () => {
+    if (month === 11) {
+      setMonth(0);
+      setYear(year + 1);
+    } else {
+      setMonth(month + 1);
+    }
+  };
+
+  const onClickPrevMonth = () => {
+    if (month === 0) {
+      setMonth(11);
+      setYear(year - 1);
+    } else {
+      setMonth(month - 1);
+    }
+  };
   return (
     <div>
       <Title>Voyage Calendar</Title>
+      <Title>
+        {year} - {month + 1}
+      </Title>
       <ControllerWrapper>
         <ButtonWrapper>
           <Button title="today" onClick={() => console.log('clicked')}>
@@ -29,10 +57,10 @@ export function App() {
           </Button>
         </ButtonWrapper>
         <ButtonWrapper style={{ textAlign: 'center' }}>
-          <Button title="today" onClick={() => console.log('clicked')}>
+          <Button title="today" onClick={onClickPrevMonth}>
             {'<'}
           </Button>
-          <Button title="today" onClick={() => console.log('clicked')}>
+          <Button title="today" onClick={onClickNextMonth}>
             {'>'}
           </Button>
         </ButtonWrapper>
@@ -48,7 +76,7 @@ export function App() {
           </Button>
         </ButtonWrapper>
       </ControllerWrapper>
-      <MonthView monthNumber={MM.April} />
+      <MonthView year={year} month={month + 1} />
     </div>
   );
 }

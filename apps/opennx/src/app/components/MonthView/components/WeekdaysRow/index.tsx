@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import moment from 'moment';
 import WeekdaysCell from '../WeekdaysCell';
 import { WeekdaysRowWrapper } from './styled';
 
@@ -15,13 +16,7 @@ const WeekdaysRow: FC<IProps> = ({ from }) => {
     return tmp;
   });
 
-  return (
-    <WeekdaysRowWrapper>
-      {days.map((day) => (
-        <WeekdaysCell day={day}></WeekdaysCell>
-      ))}
-    </WeekdaysRowWrapper>
-  );
+  return <WeekdaysRowWrapper></WeekdaysRowWrapper>;
 };
 
 export default WeekdaysRow;

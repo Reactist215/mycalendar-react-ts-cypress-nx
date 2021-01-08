@@ -1,21 +1,37 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import moment from 'moment';
+import {
+  getDaysMonth,
+  getFirstDayMonth,
+  getWeeks,
+  getWeeksNum,
+  weeks_of_month,
+} from '../../util/date';
 import WeekdaysHeader from './components/WeekdaysHeader';
 import WeekdaysRow from './components/WeekdaysRow';
-import { MonthViewWrapper } from './styled';
+import { MonthViewWrapper, WeekRowWrapper } from './styled';
+import WeekdaysCell from './components/WeekdaysCell';
 
 type MonthViewProps = {
-  monthNumber: number;
+  year: number;
+  month: number;
 };
 
-const MonthView: FC<MonthViewProps> = ({ monthNumber }) => {
+const MonthView: FC<MonthViewProps> = ({ year, month }) => {
+  const firstDayMonth = getFirstDayMonth(year, month);
+
+  const weeks_month = weeks_of_month(year, month);
+
   return (
     <MonthViewWrapper>
       <WeekdaysHeader type="full" />
-      <WeekdaysRow from={1} />
-      <WeekdaysRow from={8} />
-      <WeekdaysRow from={15} />
-      <WeekdaysRow from={22} />
-      <WeekdaysRow from={29} />
+      {weeks_month.map((week, index) => (
+        <WeekRowWrapper key={index}>
+          {week.map((date) => (
+            <WeekdaysCell key={date.toString()} date={date} />
+          ))}
+        </WeekRowWrapper>
+      ))}
     </MonthViewWrapper>
   );
 };
