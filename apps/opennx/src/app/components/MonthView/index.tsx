@@ -18,8 +18,6 @@ type MonthViewProps = {
 };
 
 const MonthView: FC<MonthViewProps> = ({ year, month }) => {
-  const firstDayMonth = getFirstDayMonth(year, month);
-
   const weeks_month = weeks_of_month(year, month);
 
   return (
