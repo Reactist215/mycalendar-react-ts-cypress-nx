@@ -22,20 +22,6 @@ export const getDaysArray = (year: number, month: number) => {
   return result;
 };
 
-export const getWeekDays = (year: number, month: number) => {
-  const result: Array<Array<unknown>> = [];
-  for (let i = 0; i < 5; i++) {
-    const weekDays: Array<number> = [];
-    for (let j = 0; j < 7; j++) {
-      weekDays.push(null);
-    }
-
-    result.push(weekDays);
-  }
-
-  return result;
-};
-
 export const getFirstDayMonth = (year: number, month: number) => {
   return moment([year, month - 1, 1]).weekday();
 };
@@ -121,7 +107,7 @@ export const weeks_in_month = (year: number, month: number) => {
 };
 
 export const weeks_of_month = (year: number, month: number) => {
-  const startDate = moment([year, month - 1]);
+  const startDate = moment([year, month]);
   const firstWeekDate = startDate.clone().startOf('week');
   const endDate = startDate.endOf('month');
   const endWeekDate = endDate.endOf('week');
@@ -141,4 +127,31 @@ export const weeks_of_month = (year: number, month: number) => {
   } while (firstWeekDate.add(1, 'days').diff(endWeekDate) < 0);
 
   return weeks;
+};
+
+/**
+ *
+ * @param year Year Number
+ * @param weeknum ISO Week Number
+ */
+export const getWeekDays = (year: number, weeknum: number) => {
+  const firsWeekDate = moment().year(year).isoWeek(weeknum).startOf('week');
+  const endWeekDate = moment().year(year).isoWeek(weeknum).endOf('week');
+
+  const weekDays: Array<Moment> = [];
+  do {
+    weekDays.push(firsWeekDate.clone());
+  } while (firsWeekDate.add(1, 'days').diff(endWeekDate) < 0);
+
+  return weekDays;
+};
+
+export const getWeeksNumInYear = (year: number) => {
+  const startWeek = moment().year(year).startOf('year').isoWeek();
+  const endWeek = moment().year(year).endOf('year').isoWeek();
+
+  return {
+    startWeek,
+    endWeek,
+  };
 };

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import Button from './components/Button';
 import MonthView from './components/MonthView';
-import { MM } from './contants/month';
+import { ViewModes } from './contants/others';
+import WeekView from './components/WeekView';
+import DayView from './components/DayView';
 
 const Title = styled.h1`
   text-align: center;
@@ -12,47 +14,114 @@ const Title = styled.h1`
 const ControllerWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 1rem;
 `;
 
 const ButtonWrapper = styled.div`
   flex: 1;
 `;
 
+const ViewWrapper = styled.div`
+  margin-top: 1rem;
+`;
+
 export function App() {
-  const [month, setMonth] = useState(() => {
+  const [viewMode, setViewMode] = useState<number>(ViewModes.MONTH);
+
+  const [month, setMonth] = useState<number>(() => {
     return moment().month();
   });
 
-  const [year, setYear] = useState(() => {
+  const [year, setYear] = useState<number>(() => {
     return moment().year();
   });
+
+  const [weeknum, setWeeknum] = useState<number>(() => {
+    return moment().isoWeek();
+  });
+
+  const [date, setDate] = useState<Moment>(() => {
+    return moment();
+  });
+
   const onClickNextMonth = () => {
-    if (month === 11) {
-      setMonth(0);
-      setYear(year + 1);
-    } else {
-      setMonth(month + 1);
+    if (viewMode === ViewModes.MONTH) {
+      if (month === 11) {
+        setMonth(0);
+        setYear(year + 1);
+      } else {
+        setMonth(month + 1);
+      }
+    } else if (viewMode === ViewModes.WEEK) {
+      if (weeknum < moment().year(year).endOf('year').isoWeek()) {
+        setWeeknum(weeknum + 1);
+      } else {
+        setYear(year + 1);
+        setWeeknum(1);
+      }
+    } else if (viewMode === ViewModes.DAY) {
+      setDate(date.clone().add(1, 'days'));
     }
   };
 
   const onClickPrevMonth = () => {
-    if (month === 0) {
-      setMonth(11);
-      setYear(year - 1);
-    } else {
-      setMonth(month - 1);
+    if (viewMode === ViewModes.MONTH) {
+      if (month === 0) {
+        setMonth(11);
+        setYear(year - 1);
+      } else {
+        setMonth(month - 1);
+      }
+    } else if (viewMode === ViewModes.WEEK) {
+      if (weeknum > 1) {
+        setWeeknum(weeknum - 1);
+      } else {
+        setYear(year - 1);
+        setWeeknum(() => {
+          return moment()
+            .year(year - 1)
+            .endOf('year')
+            .isoWeek();
+        });
+      }
+    } else if (viewMode === ViewModes.DAY) {
+      setDate(date.clone().add(-1, 'days'));
     }
   };
+
+  const onClickToday = () => {
+    if (viewMode === ViewModes.DAY) {
+      setDate(moment());
+    } else if (viewMode === ViewModes.WEEK) {
+      setYear(moment().year());
+      setWeeknum(moment().isoWeek());
+    } else if (viewMode === ViewModes.MONTH) {
+      setYear(moment().year());
+      setMonth(moment().month());
+    }
+  };
+
+  const onChangeViewMode = (viewMode: number) => {
+    setViewMode(viewMode);
+  };
+
   return (
     <div>
       <Title>Voyage Calendar</Title>
-      <Title>
-        {year} - {month + 1}
-      </Title>
+      {viewMode === ViewModes.MONTH && (
+        <Title>{moment([year, month, 1]).format('MM-YYYY')}</Title>
+      )}
+
+      {viewMode === ViewModes.WEEK && (
+        <Title>
+          {year} - week {weeknum}
+        </Title>
+      )}
+
+      {viewMode === ViewModes.DAY && <Title>{date.format('MM-DD-YYYY')}</Title>}
+
       <ControllerWrapper>
         <ButtonWrapper>
-          <Button title="today" onClick={() => console.log('clicked')}>
+          <Button title="today" onClick={onClickToday}>
             Today
           </Button>
         </ButtonWrapper>
@@ -65,18 +134,41 @@ export function App() {
           </Button>
         </ButtonWrapper>
         <ButtonWrapper style={{ textAlign: 'right' }}>
-          <Button title="day_view_btn" onClick={() => console.log('clicked')}>
+          <Button
+            title="day_view_btn"
+            onClick={() => onChangeViewMode(ViewModes.DAY)}
+            className={`${viewMode === ViewModes.DAY ? 'active' : ''}`}
+          >
             Day
           </Button>
-          <Button title="week_view_btn" onClick={() => console.log('clicked')}>
+          <Button
+            title="week_view_btn"
+            onClick={() => onChangeViewMode(ViewModes.WEEK)}
+            className={`${viewMode === ViewModes.WEEK ? 'active' : ''}`}
+          >
             Week
           </Button>
-          <Button title="month_view_btn" onClick={() => console.log('clicked')}>
+          <Button
+            title="month_view_btn"
+            onClick={() => onChangeViewMode(ViewModes.MONTH)}
+            className={`${viewMode === ViewModes.MONTH ? 'active' : ''}`}
+          >
             Month
           </Button>
         </ButtonWrapper>
       </ControllerWrapper>
-      <MonthView year={year} month={month + 1} />
+
+      <ViewWrapper>
+        {viewMode === ViewModes.MONTH && (
+          <MonthView year={year} month={month} />
+        )}
+
+        {viewMode === ViewModes.WEEK && (
+          <WeekView year={year} weeknum={weeknum} />
+        )}
+
+        {viewMode === ViewModes.DAY && <DayView date={date} />}
+      </ViewWrapper>
     </div>
   );
 }

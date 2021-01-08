@@ -2,8 +2,9 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 type IProps = {
-  title: string;
-  onClick: () => void;
+  title?: string;
+  onClick?: () => void;
+  className?: string;
 };
 
 const StyledButton = styled.button`
@@ -14,17 +15,28 @@ const StyledButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   outline: none;
-  box-shadow: 0px 1px 2px -1px black;
+
   :hover {
-    box-shadow: none;
+    background: coral;
   }
   &.active {
-    box-shadow: none;
+    background: coral;
   }
 `;
-const Button: FC<IProps> = ({ title, onClick, children }) => {
+
+const Button: FC<IProps> = ({
+  title = '',
+  onClick,
+  className = '',
+  children,
+}) => {
   return (
-    <StyledButton type="button" onClick={onClick} title={title}>
+    <StyledButton
+      type="button"
+      onClick={onClick}
+      className={className}
+      title={title}
+    >
       {children}
     </StyledButton>
   );

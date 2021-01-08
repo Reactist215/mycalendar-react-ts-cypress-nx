@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import moment, { Moment } from 'moment';
+import { Moment } from 'moment';
 
 type IProps = {
   date: Moment;
