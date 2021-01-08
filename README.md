@@ -1,4 +1,8 @@
-# Nxawesome
+# My Calendar From Scratch
+
+## Purpose
+
+- There are many calendar libraries to use but very difficult to customize. I need to make my own calendar for full customization
 
 This project was generated using [Nx](https://nx.dev).
 
